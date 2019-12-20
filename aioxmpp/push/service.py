@@ -21,6 +21,14 @@ class PushClient(Service):
 
         data.fields.append(
             forms_xso.Field(
+                var="FORM_TYPE",
+                type_=forms_xso.FieldType.HIDDEN,
+                values=["http://jabber.org/protocol/pubsub#publish-options"],
+            )
+        )
+
+        data.fields.append(
+            forms_xso.Field(
                 var="service",
                 type_=forms_xso.FieldType.TEXT_SINGLE,
                 values=[],

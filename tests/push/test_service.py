@@ -20,7 +20,8 @@
 #
 ########################################################################
 import unittest
-
+import io
+import aioxmpp.xml as xml
 import aioxmpp.disco
 import aioxmpp.forms
 import aioxmpp.push.service as push_service
@@ -48,12 +49,6 @@ class TestService(unittest.TestCase):
             push_service.PushClient,
             aioxmpp.service.Service
         ))
-
-    def test_orders_behind_disco(self):
-        self.assertIn(
-            aioxmpp.DiscoClient,
-            push_service.PushClient.ORDER_AFTER,
-        )
 
     def setUp(self):
         self.disco = unittest.mock.Mock()
@@ -155,3 +150,18 @@ class TestService(unittest.TestCase):
             "Enable silent notification, whether true of false",
         )
 
+    def test_xml_output(self):
+        b = io.BytesIO()
+        push = push_xso.Push(jid=TEST_TO, node="some_node")
+        config = self.s.get_push_config()
+        form = PushConfigForm.from_xso(config)
+
+        form.service.value = 'fcm'
+        form.device_id.value = 'dummy_device_id'
+        form.priority.value = 'high'
+        form.silent.value = 'false'
+
+        push.data = form.render_reply()
+
+        xml.write_single_xso(push, b)
+        print(b.getvalue())

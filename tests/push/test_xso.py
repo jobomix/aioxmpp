@@ -20,7 +20,7 @@
 #
 ########################################################################
 import unittest
-
+import io
 import aioxmpp.xso
 from aioxmpp import xso
 from aioxmpp import forms
@@ -29,6 +29,7 @@ import aioxmpp.push.xso as push_xso
 from aioxmpp.forms import TextSingle
 import aioxmpp.forms.xso as forms_xso
 from aioxmpp.utils import namespaces
+
 
 TEST_TO = aioxmpp.structs.JID.fromstr("pubsub.example")
 
@@ -107,5 +108,3 @@ class TestPush(unittest.TestCase):
                 forms.Data,
             }
         )
-
-
