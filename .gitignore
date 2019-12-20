@@ -5,3 +5,4 @@ aioxmpp.egg-info
 .local
 .vagrant
 .coverage
+/aioxmpp_venv/
