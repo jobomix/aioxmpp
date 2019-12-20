@@ -37,6 +37,9 @@ class Push(aioxmpp.xso.XSO):
         self.jid = jid
         self.node = node
 
+    def validate(self):
+        pass
+
 
 class PushConfigForm(aioxmpp.forms.Form):
 
@@ -61,3 +64,6 @@ class PushConfigForm(aioxmpp.forms.Form):
         var='priority',
         label='The message priority, whether high or normal'
     )
+
+    def validate(self):
+        pass
