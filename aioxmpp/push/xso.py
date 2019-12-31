@@ -38,8 +38,27 @@ class Push(aioxmpp.xso.XSO):
         self.node = node
 
 
-class PushConfigForm(aioxmpp.forms.Form):
+@aioxmpp.IQ.as_payload_class
+class DisablePush(aioxmpp.xso.XSO):
+    TAG = (namespaces.xep0357_push, "disable")
 
+    jid = Attr(
+        "jid",
+        type_=JID()
+    )
+
+    node = Attr(
+        "node",
+        default=None
+    )
+
+    def __init__(self, jid, node=None):
+        super().__init__()
+        self.jid = jid
+        self.node = node
+
+
+class PushConfigForm(aioxmpp.forms.Form):
     FORM_TYPE = 'http://jabber.org/protocol/pubsub#publish-options'
 
     service = aioxmpp.forms.TextSingle(

@@ -92,3 +92,11 @@ class PushClient(Service):
         iq.payload.data = config
 
         yield from self.client.send(iq)
+
+    @asyncio.coroutine
+    def disable_push_config(self, jid, node=None):
+        iq = aioxmpp.stanza.IQ(type_=aioxmpp.structs.IQType.SET)
+        iq.payload = push_xso.DisablePush(
+            jid=jid, node=node
+        )
+        yield from self.client.send(iq)

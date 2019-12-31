@@ -150,7 +150,7 @@ class TestService(unittest.TestCase):
             "Enable silent notification, whether true of false",
         )
 
-    def test_xml_output(self):
+    def test_push_xml_output(self):
         b = io.BytesIO()
         push = push_xso.Push(jid=TEST_TO, node="some_node")
         config = self.s.get_push_config()
@@ -164,4 +164,24 @@ class TestService(unittest.TestCase):
         push.data = form.render_reply()
 
         xml.write_single_xso(push, b)
-        print(b.getvalue())
+        assert b.getvalue() == b'<enable xmlns="urn:xmpp:push:0" ' \
+                               b'jid="pubsub.example" node="some_node">' \
+                               b'<x xmlns="jabber:x:data" type="submit">' \
+                               b'<field type="hidden" var="FORM_TYPE">' \
+                               b'<value>http://jabber.org/protocol/pubsub#publish-options</value>' \
+                               b'</field><field type="text-single" var="service">' \
+                               b'<desc>The service to use for push notification: whether fcm or apns</desc>' \
+                               b'<value>fcm</value></field><field type="text-single" var="device_id">' \
+                               b'<desc>The unique device id for push notification</desc>' \
+                               b'<value>dummy_device_id</value></field>' \
+                               b'<field type="text-single" var="priority">' \
+                               b'<desc>The message priority, whether high or normal</desc>' \
+                               b'<value>high</value></field><field type="text-single" var="silent">' \
+                               b'<desc>Enable silent notification, whether true of false</desc>' \
+                               b'<value>false</value></field></x></enable>'
+
+    def test_disable_push_xml_output(self):
+        b = io.BytesIO()
+        push = push_xso.DisablePush(jid=TEST_TO, node="some_node")
+        xml.write_single_xso(push, b)
+        assert b.getvalue() == b'<disable xmlns="urn:xmpp:push:0" jid="pubsub.example" node="some_node"/>'

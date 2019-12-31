@@ -30,7 +30,6 @@ from aioxmpp.forms import TextSingle
 import aioxmpp.forms.xso as forms_xso
 from aioxmpp.utils import namespaces
 
-
 TEST_TO = aioxmpp.structs.JID.fromstr("pubsub.example")
 
 
@@ -94,6 +93,75 @@ class TestPush(unittest.TestCase):
         )
         self.assertIs(
             push_xso.Push.node.default,
+            None
+        )
+
+    def test_data(self):
+        self.assertIsInstance(
+            push_xso.Push.data,
+            xso.Child,
+        )
+        self.assertSetEqual(
+            push_xso.Push.data._classes,
+            {
+                forms.Data,
+            }
+        )
+
+
+class TestDisablePush(unittest.TestCase):
+
+    def test_is_xso(self):
+        self.assertTrue(issubclass(
+            push_xso.DisablePush,
+            aioxmpp.xso.XSO,
+        ))
+
+    def test_tag(self):
+        self.assertEqual(
+            push_xso.DisablePush.TAG,
+            (namespaces.xep0357_push, "disable")
+        )
+
+    def test_is_iq_payload(self):
+        self.assertIn(
+            push_xso.DisablePush.TAG,
+            aioxmpp.IQ.CHILD_MAP,
+        )
+
+    def test_JID(self):
+        self.assertIsInstance(
+            push_xso.DisablePush.jid,
+            xso.Attr
+        )
+        self.assertEqual(
+            push_xso.DisablePush.jid.tag,
+            (None, "jid")
+        )
+        self.assertIsInstance(
+            push_xso.DisablePush.jid.type_,
+            xso.JID
+        )
+        self.assertIs(
+            push_xso.DisablePush.jid.default,
+            xso.NO_DEFAULT
+        )
+
+    def test_node(self):
+        self.assertIsInstance(
+            push_xso.DisablePush.node,
+            xso.Attr
+        )
+        self.assertEqual(
+            push_xso.DisablePush.node.tag,
+            (None, "node")
+        )
+        self.assertIsInstance(
+            push_xso.DisablePush.node.type_,
+            xso.String
+        )
+        self.assertIs(
+            push_xso.DisablePush.node.default,
             None
         )
 
